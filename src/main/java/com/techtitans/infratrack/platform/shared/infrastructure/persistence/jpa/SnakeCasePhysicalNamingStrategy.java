@@ -1,4 +1,4 @@
-package com.techtitans.infratrack.platform.shared.infrastructure.persistence.jpa.strategy;
+package com.techtitans.infratrack.platform.shared.infrastructure.persistence.jpa;
 
 import org.hibernate.boot.model.naming.Identifier;
 import org.hibernate.boot.model.naming.PhysicalNamingStrategy;
@@ -20,3 +20,29 @@ public class SnakeCasePhysicalNamingStrategy implements PhysicalNamingStrategy {
     public Identifier toPhysicalSchemaName(Identifier identifier, JdbcEnvironment jdbcEnvironment) {
         return toSnakeCase(identifier);
     }
+
+    @Override
+    public Identifier toPhysicalTableName(Identifier identifier, JdbcEnvironment jdbcEnvironment) {
+        return toSnakeCase(identifier);
+    }
+
+    @Override
+    public Identifier toPhysicalSequenceName(Identifier identifier, JdbcEnvironment jdbcEnvironment) {
+        return toSnakeCase(identifier);
+    }
+
+    @Override
+    public Identifier toPhysicalColumnName(Identifier identifier, JdbcEnvironment jdbcEnvironment) {
+        return toSnakeCase(identifier);
+    }
+
+    private Identifier toSnakeCase(final Identifier identifier) {
+        if (identifier == null) return null;
+        final String regex = "([a-z])([A-Z])";
+        final String replacement = "$1_$2";
+        final String newName = identifier.getText()
+                .replaceAll(regex, replacement)
+                .toLowerCase();
+        return Identifier.toIdentifier(newName);
+    }
+}

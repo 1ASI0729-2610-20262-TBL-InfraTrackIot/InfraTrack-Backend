@@ -1,8 +1,12 @@
 package com.techtitans.infratrack.platform.iam.interfaces.acl;
 
 import com.techtitans.infratrack.platform.iam.application.commandservices.UserCommandService;
+import com.techtitans.infratrack.platform.iam.application.queryservices.UserQueryService;
 import com.techtitans.infratrack.platform.iam.domain.model.commands.SignUpCommand;
 import com.techtitans.infratrack.platform.iam.domain.model.entities.Role;
+import com.techtitans.infratrack.platform.iam.domain.model.queries.GetUserByIdQuery;
+import com.techtitans.infratrack.platform.iam.domain.model.queries.GetUserByUsernameQuery;
+import org.apache.logging.log4j.util.Strings;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,13 +14,16 @@ import java.util.List;
 /**
  * ACL facade that exposes IAM bounded context capabilities to other contexts.
  *
- * <p>v0.2.0 slice: sign-up only (query methods added in v0.4.0).</p>
+ * <p>Provides a simplified integration surface for creating users and querying identity data
+ * without leaking IAM internal model details.</p>
  */
 public class IamContextFacade {
     private final UserCommandService userCommandService;
+    private final UserQueryService userQueryService;
 
-    public IamContextFacade(UserCommandService userCommandService) {
+    public IamContextFacade(UserCommandService userCommandService, UserQueryService userQueryService) {
         this.userCommandService = userCommandService;
+        this.userQueryService = userQueryService;
     }
 
     /**
@@ -52,4 +59,31 @@ public class IamContextFacade {
         }
         return 0L;
     }
+
+    /**
+     * Fetches the identifier for a username.
+     *
+     * @param username username to search
+     * @return user identifier, or {@code 0L} when user is not found
+     */
+    public Long fetchUserIdByUsername(String username) {
+        var getUserByUsernameQuery = new GetUserByUsernameQuery(username);
+        var result = userQueryService.handle(getUserByUsernameQuery);
+        if (result.isEmpty()) return 0L;
+        return result.get().getId();
+    }
+
+    /**
+     * Fetches the username for a user identifier.
+     *
+     * @param userId user identifier
+     * @return username, or an empty string when user is not found
+     */
+    public String fetchUsernameByUserId(Long userId) {
+        var getUserByIdQuery = new GetUserByIdQuery(userId);
+        var result = userQueryService.handle(getUserByIdQuery);
+        if (result.isEmpty()) return Strings.EMPTY;
+        return result.get().getUsername();
+    }
+
 }

@@ -1,0 +1,55 @@
+package com.techtitans.infratrack.platform.iam.interfaces.acl;
+
+import com.techtitans.infratrack.platform.iam.application.commandservices.UserCommandService;
+import com.techtitans.infratrack.platform.iam.domain.model.commands.SignUpCommand;
+import com.techtitans.infratrack.platform.iam.domain.model.entities.Role;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * ACL facade that exposes IAM bounded context capabilities to other contexts.
+ *
+ * <p>v0.2.0 slice: sign-up only (query methods added in v0.4.0).</p>
+ */
+public class IamContextFacade {
+    private final UserCommandService userCommandService;
+
+    public IamContextFacade(UserCommandService userCommandService) {
+        this.userCommandService = userCommandService;
+    }
+
+    /**
+     * Creates a new user assigning the default role.
+     *
+     * @param username username to register
+     * @param password raw password
+     * @return created user identifier, or {@code 0L} when creation fails
+     */
+    public Long createUser(String username, String password) {
+        var signUpCommand = new SignUpCommand(username, password, List.of(Role.getDefaultRole()));
+        var result = userCommandService.handle(signUpCommand);
+        if (result instanceof com.techtitans.infratrack.platform.shared.application.result.Result.Success(var user)) {
+            return user.getId();
+        }
+        return 0L;
+    }
+
+    /**
+     * Creates a new user with explicit role names.
+     *
+     * @param username username to register
+     * @param password raw password
+     * @param roleNames role names to assign; unknown names are ignored
+     * @return created user identifier, or {@code 0L} when creation fails
+     */
+    public Long createUser(String username, String password, List<String> roleNames) {
+        var roles = roleNames != null ? roleNames.stream().map(Role::toRoleFromName).toList() : new ArrayList<Role>();
+        var signUpCommand = new SignUpCommand(username, password, roles);
+        var result = userCommandService.handle(signUpCommand);
+        if (result instanceof com.techtitans.infratrack.platform.shared.application.result.Result.Success(var user)) {
+            return user.getId();
+        }
+        return 0L;
+    }
+}

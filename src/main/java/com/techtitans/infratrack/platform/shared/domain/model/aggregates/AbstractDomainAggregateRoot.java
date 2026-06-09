@@ -1,4 +1,4 @@
-package com.techtitans.infratrack.platform.shared.aggregates;
+package com.techtitans.infratrack.platform.shared.domain.model.aggregates;
 
 import org.jspecify.annotations.NullMarked;
 import org.springframework.data.domain.AbstractAggregateRoot;

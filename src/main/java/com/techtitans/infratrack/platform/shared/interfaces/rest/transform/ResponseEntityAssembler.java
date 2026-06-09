@@ -1,7 +1,7 @@
-package com.techtitans.infratrack.platform.shared.interfaces.transform;
+package com.techtitans.infratrack.platform.shared.interfaces.rest.transform;
 
-import com.acme.center.platform.shared.application.result.ApplicationError;
-import com.acme.center.platform.shared.application.result.Result;
+import com.techtitans.infratrack.platform.shared.application.result.ApplicationError;
+import com.techtitans.infratrack.platform.shared.application.result.Result;
 import org.jspecify.annotations.NullMarked;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;

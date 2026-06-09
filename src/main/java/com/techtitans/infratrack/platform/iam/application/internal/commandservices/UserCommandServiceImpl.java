@@ -2,12 +2,15 @@ package com.techtitans.infratrack.platform.iam.application.internal.commandservi
 
 import com.techtitans.infratrack.platform.iam.application.commandservices.UserCommandService;
 import com.techtitans.infratrack.platform.iam.application.internal.outboundservices.hashing.HashingService;
+import com.techtitans.infratrack.platform.iam.application.internal.outboundservices.tokens.TokenService;
 import com.techtitans.infratrack.platform.iam.domain.model.aggregates.User;
+import com.techtitans.infratrack.platform.iam.domain.model.commands.SignInCommand;
 import com.techtitans.infratrack.platform.iam.domain.model.commands.SignUpCommand;
 import com.techtitans.infratrack.platform.iam.domain.repositories.RoleRepository;
 import com.techtitans.infratrack.platform.iam.domain.repositories.UserRepository;
 import com.techtitans.infratrack.platform.shared.application.result.ApplicationError;
 import com.techtitans.infratrack.platform.shared.application.result.Result;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.springframework.stereotype.Service;
 
 /**
@@ -18,15 +21,31 @@ public class UserCommandServiceImpl implements UserCommandService {
 
     private final UserRepository userRepository;
     private final HashingService hashingService;
+    private final TokenService tokenService;
     private final RoleRepository roleRepository;
 
     public UserCommandServiceImpl(
             UserRepository userRepository,
             HashingService hashingService,
+            TokenService tokenService,
             RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.hashingService = hashingService;
+        this.tokenService = tokenService;
         this.roleRepository = roleRepository;
+    }
+
+    @Override
+    public Result<ImmutablePair<User, String>, ApplicationError> handle(SignInCommand command) {
+        var user = userRepository.findByUsername(command.username());
+        if (user.isEmpty()) {
+            return Result.failure(ApplicationError.notFound("User", command.username()));
+        }
+        if (!hashingService.matches(command.password(), user.get().getPassword())) {
+            return Result.failure(ApplicationError.validationError("credentials", "Invalid username or password"));
+        }
+        var token = tokenService.generateToken(user.get().getUsername());
+        return Result.success(ImmutablePair.of(user.get(), token));
     }
 
     @Override

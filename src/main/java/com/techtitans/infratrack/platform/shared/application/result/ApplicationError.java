@@ -1,4 +1,4 @@
-package com.techtitans.infratrack.platform.shared.application;
+package com.techtitans.infratrack.platform.shared.application.result;
 
 import org.jspecify.annotations.NullMarked;
 

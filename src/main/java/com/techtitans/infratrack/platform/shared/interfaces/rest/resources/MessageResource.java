@@ -1,4 +1,4 @@
-package com.techtitans.infratrack.platform.shared.interfaces.resources;
+package com.techtitans.infratrack.platform.shared.interfaces.rest.resources;
 
 /**
  * Resource used for simple success or informational REST responses.

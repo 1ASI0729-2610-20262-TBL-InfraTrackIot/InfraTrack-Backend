@@ -1,4 +1,4 @@
-package com.techtitans.infratrack.platform.shared.infrastructure.configuration;
+package com.techtitans.infratrack.platform.shared.infrastructure.i18n.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

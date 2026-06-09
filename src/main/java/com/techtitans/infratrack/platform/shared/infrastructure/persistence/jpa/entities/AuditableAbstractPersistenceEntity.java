@@ -1,4 +1,4 @@
-package com.techtitans.infratrack.platform.shared.infrastructure.persistence;
+package com.techtitans.infratrack.platform.shared.infrastructure.persistence.jpa.entities;
 
 import jakarta.persistence.*;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package com.techtitans.infratrack.platform.shared.interfaces.resources;
+package com.techtitans.infratrack.platform.shared.interfaces.rest.resources;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import org.jspecify.annotations.Nullable;

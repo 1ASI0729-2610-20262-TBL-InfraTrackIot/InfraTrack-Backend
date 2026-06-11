@@ -7,7 +7,7 @@ import com.techtitans.infratrack.platform.monitoring.domain.model.queries.GetFle
 import com.techtitans.infratrack.platform.monitoring.interfaces.rest.resources.AlertResource;
 import com.techtitans.infratrack.platform.monitoring.interfaces.rest.resources.CreateAlertResource;
 import com.techtitans.infratrack.platform.monitoring.interfaces.rest.transform.MonitoringResourceFromEntityAssembler;
-import com.techtitans.infratrack.platform.shared.interfaces.rest.transform.ResponseEntityAssembler;
+import com.techtitans.infratrack.platform.monitoring.interfaces.rest.transform.ResponseEntityAssembler;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,7 +21,7 @@ import java.util.List;
 @Tag(name = "Alerts", description = "Fleet alerts center and control panel notifications")
 public class AlertsController {
 
-    private final FleetAlertCommandService fleetAlertCommandService;
+private final FleetAlertCommandService fleetAlertCommandService;
     private final FleetAlertQueryService fleetAlertQueryService;
 
     public AlertsController(
@@ -29,6 +29,7 @@ public class AlertsController {
             FleetAlertQueryService fleetAlertQueryService) {
         this.fleetAlertCommandService = fleetAlertCommandService;
         this.fleetAlertQueryService = fleetAlertQueryService;
+    }
     }
 
     @GetMapping

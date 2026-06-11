@@ -2,12 +2,14 @@ package com.techtitans.infratrack.platform.monitoring.interfaces.rest;
 
 import com.techtitans.infratrack.platform.monitoring.application.commandservices.FleetAlertCommandService;
 import com.techtitans.infratrack.platform.monitoring.application.queryservices.FleetAlertQueryService;
+import com.techtitans.infratrack.platform.monitoring.domain.model.commands.AcknowledgeFleetAlertCommand;
 import com.techtitans.infratrack.platform.monitoring.domain.model.queries.GetAllFleetAlertsQuery;
 import com.techtitans.infratrack.platform.monitoring.domain.model.queries.GetFleetAlertByIdQuery;
 import com.techtitans.infratrack.platform.monitoring.interfaces.rest.resources.AlertResource;
 import com.techtitans.infratrack.platform.monitoring.interfaces.rest.resources.CreateAlertResource;
 import com.techtitans.infratrack.platform.monitoring.interfaces.rest.transform.MonitoringResourceFromEntityAssembler;
 import com.techtitans.infratrack.platform.monitoring.interfaces.rest.transform.ResponseEntityAssembler;
+import com.techtitans.infratrack.platform.shared.interfaces.rest.resources.MessageResource;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,7 +23,7 @@ import java.util.List;
 @Tag(name = "Alerts", description = "Fleet alerts center and control panel notifications")
 public class AlertsController {
 
-private final FleetAlertCommandService fleetAlertCommandService;
+    private final FleetAlertCommandService fleetAlertCommandService;
     private final FleetAlertQueryService fleetAlertQueryService;
 
     public AlertsController(
@@ -29,7 +31,6 @@ private final FleetAlertCommandService fleetAlertCommandService;
             FleetAlertQueryService fleetAlertQueryService) {
         this.fleetAlertCommandService = fleetAlertCommandService;
         this.fleetAlertQueryService = fleetAlertQueryService;
-    }
     }
 
     @GetMapping
@@ -56,6 +57,17 @@ private final FleetAlertCommandService fleetAlertCommandService;
                 result,
                 MonitoringResourceFromEntityAssembler::toAlertResourceFromEntity,
                 HttpStatus.CREATED
+        );
+    }
+
+    @PostMapping("/{alertId}/acknowledgements")
+    public ResponseEntity<?> acknowledgeAlert(@PathVariable Long alertId) {
+        var result = fleetAlertCommandService.handle(new AcknowledgeFleetAlertCommand(alertId))
+                .map(alert -> new MessageResource("Alert acknowledged successfully"));
+        return ResponseEntityAssembler.toResponseEntityFromResult(
+                result,
+                message -> message,
+                HttpStatus.OK
         );
     }
 }

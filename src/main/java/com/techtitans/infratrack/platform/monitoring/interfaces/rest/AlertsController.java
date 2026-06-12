@@ -8,8 +8,8 @@ import com.techtitans.infratrack.platform.monitoring.domain.model.queries.GetFle
 import com.techtitans.infratrack.platform.monitoring.interfaces.rest.resources.AlertResource;
 import com.techtitans.infratrack.platform.monitoring.interfaces.rest.resources.CreateAlertResource;
 import com.techtitans.infratrack.platform.monitoring.interfaces.rest.transform.MonitoringResourceFromEntityAssembler;
-import com.techtitans.infratrack.platform.monitoring.interfaces.rest.transform.ResponseEntityAssembler;
 import com.techtitans.infratrack.platform.shared.interfaces.rest.resources.MessageResource;
+import com.techtitans.infratrack.platform.shared.interfaces.rest.transform.ResponseEntityAssembler;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

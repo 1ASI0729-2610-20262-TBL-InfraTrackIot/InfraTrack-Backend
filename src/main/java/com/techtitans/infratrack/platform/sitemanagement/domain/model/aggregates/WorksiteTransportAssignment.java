@@ -1,12 +1,10 @@
 package com.techtitans.infratrack.platform.sitemanagement.domain.model.aggregates;
 
 import com.techtitans.infratrack.platform.shared.domain.model.aggregates.AbstractDomainAggregateRoot;
+import com.techtitans.infratrack.platform.sitemanagement.domain.model.commands.AssignTransportToWorksiteCommand;
 import lombok.Getter;
 import lombok.Setter;
 
-/**
- * v0.17.0 slice — persistence entity mapping only (assign command added in v0.19.0).
- */
 @Getter
 public class WorksiteTransportAssignment extends AbstractDomainAggregateRoot<WorksiteTransportAssignment> {
 
@@ -21,5 +19,11 @@ public class WorksiteTransportAssignment extends AbstractDomainAggregateRoot<Wor
 
     public WorksiteTransportAssignment() {
         this.gpsLabel = "";
+    }
+
+    public WorksiteTransportAssignment(AssignTransportToWorksiteCommand command) {
+        this.worksiteId = command.worksiteId();
+        this.machineryId = command.transportId();
+        this.gpsLabel = command.gpsLabel() != null ? command.gpsLabel() : "";
     }
 }

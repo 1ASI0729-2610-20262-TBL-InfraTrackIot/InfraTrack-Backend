@@ -1,5 +1,5 @@
 package com.techtitans.infratrack.platform.shared.infrastructure.documentation.openapi.configuration;
-
+ 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.ExternalDocumentation;
 import io.swagger.v3.oas.models.OpenAPI;
@@ -12,9 +12,9 @@ import io.swagger.v3.oas.models.servers.Server;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
+ 
 import java.util.List;
-
+ 
 /**
  * Configures the OpenAPI specification exposed by the platform.
  */
@@ -23,15 +23,21 @@ public class OpenApiConfiguration {
     // Properties
     @Value("${spring.application.name}")
     String applicationName;
-
+ 
     @Value("${documentation.application.description}")
     String applicationDescription;
-
+ 
     @Value("${documentation.application.version}")
     String applicationVersion;
-
+ 
+    @Value("${documentation.application.server-url}")
+    String serverUrl;
+ 
+    @Value("${documentation.application.local-server-url}")
+    String localServerUrl;
+ 
     // Methods
-
+ 
     /**
      * Builds the OpenAPI document used by Swagger UI and client generation tools.
      *
@@ -39,7 +45,7 @@ public class OpenApiConfiguration {
      */
     @Bean
     public OpenAPI learningPlatformOpenApi() {
-
+ 
         // General configuration
         var openApi = new OpenAPI();
         openApi
@@ -57,17 +63,20 @@ public class OpenApiConfiguration {
                 .externalDocs(new ExternalDocumentation()
                         .description("ACME Learning Platform wiki Documentation")
                         .url("https://acme-learning-platform.wiki.github.io/docs"));
-
-        // Add server configurations
+ 
+        // Production first so Swagger UI defaults to the deployed API when opened on Render
         openApi.servers(List.of(
                 new Server()
-                        .url("https://infratrack-api.onrender.com")
-                        .description("Local Development Environment")
+                        .url(this.serverUrl)
+                        .description("Production (Render)"),
+                new Server()
+                        .url(this.localServerUrl)
+                        .description("Local Development")
         ));
-
+ 
         // Add a security scheme
         final String securitySchemeName = "bearerAuth";
-
+ 
         openApi.addSecurityItem(new SecurityRequirement()
                         .addList(securitySchemeName))
                 .components(new Components()
@@ -78,7 +87,7 @@ public class OpenApiConfiguration {
                                         .scheme("bearer")
                                         .bearerFormat("JWT")
                                         .description("JWT Bearer token for API authentication")));
-
+ 
         return openApi;
     }
 }

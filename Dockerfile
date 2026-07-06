@@ -12,6 +12,8 @@ RUN ./mvnw clean package -DskipTests -B
 
 FROM eclipse-temurin:21-jre
 
+ENV SPRING_PROFILES_ACTIVE=prod
+
 WORKDIR /app
 
 RUN useradd -r -u 1001 appuser

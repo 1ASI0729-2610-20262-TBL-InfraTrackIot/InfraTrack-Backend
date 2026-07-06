@@ -61,14 +61,8 @@ public class OpenApiConfiguration {
         // Add server configurations
         openApi.servers(List.of(
                 new Server()
-                        .url("http://localhost:8080")
-                        .description("Local Development Environment"),
-                new Server()
-                        .url("https://staging-api.acme-learning.com")
-                        .description("Staging Environment"),
-                new Server()
-                        .url("https://api.acme-learning.com")
-                        .description("Production Environment")
+                        .url("https://infratrack-api.onrender.com")
+                        .description("Local Development Environment")
         ));
 
         // Add a security scheme

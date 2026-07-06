@@ -4,6 +4,7 @@ import com.techtitans.infratrack.platform.iam.application.queryservices.RoleQuer
 import com.techtitans.infratrack.platform.iam.domain.model.queries.GetAllRolesQuery;
 import com.techtitans.infratrack.platform.iam.interfaces.rest.resources.RoleResource;
 import com.techtitans.infratrack.platform.iam.interfaces.rest.transform.RoleResourceFromEntityAssembler;
+import com.techtitans.infratrack.platform.shared.interfaces.rest.documentation.ApiDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -40,7 +41,7 @@ public class RolesController {
     @GetMapping
     @Operation(
         summary = "Get all roles",
-        description = "Retrieves a list of all available system roles.",
+        description = "Lists IAM roles seeded at startup. " + ApiDocumentation.AUTH_STEPS,
         security = @SecurityRequirement(name = "bearerAuth")
     )
     @ApiResponses(value = {

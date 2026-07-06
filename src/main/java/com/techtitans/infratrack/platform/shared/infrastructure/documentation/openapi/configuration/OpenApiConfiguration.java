@@ -1,5 +1,5 @@
 package com.techtitans.infratrack.platform.shared.infrastructure.documentation.openapi.configuration;
- 
+
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.ExternalDocumentation;
 import io.swagger.v3.oas.models.OpenAPI;
@@ -12,71 +12,62 @@ import io.swagger.v3.oas.models.servers.Server;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
- 
+
 import java.util.List;
- 
+
 /**
  * Configures the OpenAPI specification exposed by the platform.
  */
 @Configuration
 public class OpenApiConfiguration {
-    // Properties
+
     @Value("${spring.application.name}")
     String applicationName;
- 
+
     @Value("${documentation.application.description}")
     String applicationDescription;
- 
+
     @Value("${documentation.application.version}")
     String applicationVersion;
- 
+
     @Value("${documentation.application.server-url}")
     String serverUrl;
- 
+
     @Value("${documentation.application.local-server-url}")
     String localServerUrl;
- 
-    // Methods
- 
-    /**
-     * Builds the OpenAPI document used by Swagger UI and client generation tools.
-     *
-     * @return configured OpenAPI descriptor
-     */
+
     @Bean
     public OpenAPI learningPlatformOpenApi() {
- 
-        // General configuration
         var openApi = new OpenAPI();
         openApi
                 .info(new Info()
                         .title(this.applicationName)
-                        .description(this.applicationDescription)
+                        .description(this.applicationDescription
+                                + "\n\n**REST conventions:** nested resources use path parameters "
+                                + "(e.g. `/worksites/{worksiteId}/staff`, `/machinery/{machineryId}/alerts`). "
+                                + "Authenticate via `POST /api/v1/authentication/sign-in`, then use **Authorize** with `Bearer <token>`.")
                         .version(this.applicationVersion)
                         .contact(new Contact()
-                                .name("ACME Learning Center Support")
-                                .email("support@acme-learning.com")
-                                .url("https://acme-learning.com/support"))
+                                .name("InfraTrack Team")
+                                .email("support@infratrack.com"))
                         .license(new License()
                                 .name("Apache 2.0")
                                 .url("https://www.apache.org/licenses/LICENSE-2.0.html")))
                 .externalDocs(new ExternalDocumentation()
-                        .description("ACME Learning Platform wiki Documentation")
-                        .url("https://acme-learning-platform.wiki.github.io/docs"));
- 
-        // Production first so Swagger UI defaults to the deployed API when opened on Render
+                        .description("InfraTrack GitHub")
+                        .url("https://github.com/1ASI0729-2610-20262-TBL-InfraTrackIot/InfraTrack-Backend"));
+
         openApi.servers(List.of(
                 new Server()
                         .url(this.serverUrl)
                         .description("Production (Render)"),
                 new Server()
                         .url(this.localServerUrl)
-                        .description("Local Development")
+                        .description("Local development")
         ));
- 
-        // Add a security scheme
+
         final String securitySchemeName = "bearerAuth";
- 
+
         openApi.addSecurityItem(new SecurityRequirement()
                         .addList(securitySchemeName))
                 .components(new Components()
@@ -86,8 +77,8 @@ public class OpenApiConfiguration {
                                         .type(SecurityScheme.Type.HTTP)
                                         .scheme("bearer")
                                         .bearerFormat("JWT")
-                                        .description("JWT Bearer token for API authentication")));
- 
+                                        .description("JWT from POST /api/v1/authentication/sign-in")));
+
         return openApi;
     }
 }

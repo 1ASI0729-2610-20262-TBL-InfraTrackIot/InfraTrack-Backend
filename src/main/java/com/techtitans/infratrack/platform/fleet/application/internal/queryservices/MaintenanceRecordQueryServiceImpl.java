@@ -4,6 +4,7 @@ import com.techtitans.infratrack.platform.fleet.application.queryservices.Mainte
 import com.techtitans.infratrack.platform.fleet.domain.model.aggregates.MaintenanceRecord;
 import com.techtitans.infratrack.platform.fleet.domain.model.queries.GetAllMaintenanceRecordsQuery;
 import com.techtitans.infratrack.platform.fleet.domain.model.queries.GetMaintenanceRecordByIdQuery;
+import com.techtitans.infratrack.platform.fleet.domain.model.queries.GetMaintenanceRecordsByMachineryIdQuery;
 import com.techtitans.infratrack.platform.fleet.domain.repositories.MaintenanceRecordRepository;
 import org.springframework.stereotype.Service;
 
@@ -27,5 +28,10 @@ public class MaintenanceRecordQueryServiceImpl implements MaintenanceRecordQuery
     @Override
     public List<MaintenanceRecord> handle(GetAllMaintenanceRecordsQuery query) {
         return maintenanceRecordRepository.findAll();
+    }
+
+    @Override
+    public List<MaintenanceRecord> handle(GetMaintenanceRecordsByMachineryIdQuery query) {
+        return maintenanceRecordRepository.findByMachineryId(query.machineryId());
     }
 }

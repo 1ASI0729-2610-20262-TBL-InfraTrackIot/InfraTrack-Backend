@@ -6,6 +6,7 @@ import com.techtitans.infratrack.platform.iam.interfaces.rest.resources.SignInRe
 import com.techtitans.infratrack.platform.iam.interfaces.rest.transform.AuthenticatedUserResourceFromEntityAssembler;
 import com.techtitans.infratrack.platform.iam.interfaces.rest.transform.SignInCommandFromResourceAssembler;
 import com.techtitans.infratrack.platform.shared.interfaces.rest.transform.ResponseEntityAssembler;
+import com.techtitans.infratrack.platform.shared.interfaces.rest.documentation.ApiDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -32,7 +33,11 @@ public class SignInController {
     }
 
     @PostMapping("/sign-in")
-    @Operation(summary = "User sign-in", description = "Authenticates a user with provided credentials and returns JWT token for subsequent requests.")
+    @Operation(
+            summary = "User sign-in",
+            description = "Authenticates a user and returns a JWT. "
+                    + ApiDocumentation.PUBLIC_ENDPOINT
+                    + " Example body: `{\"username\":\"owner@infratrack.com\",\"password\":\"Password123\"}`.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "User authenticated successfully",
                     content = @Content(schema = @Schema(implementation = AuthenticatedUserResource.class))),

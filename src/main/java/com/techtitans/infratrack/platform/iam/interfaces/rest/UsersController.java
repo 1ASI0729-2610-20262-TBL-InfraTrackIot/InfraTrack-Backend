@@ -5,6 +5,7 @@ import com.techtitans.infratrack.platform.iam.domain.model.queries.GetAllUsersQu
 import com.techtitans.infratrack.platform.iam.domain.model.queries.GetUserByIdQuery;
 import com.techtitans.infratrack.platform.iam.interfaces.rest.resources.UserResource;
 import com.techtitans.infratrack.platform.iam.interfaces.rest.transform.UserResourceFromEntityAssembler;
+import com.techtitans.infratrack.platform.shared.interfaces.rest.documentation.ApiDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -44,7 +45,7 @@ public class UsersController {
     @GetMapping
     @Operation(
         summary = "Get all users",
-        description = "Retrieves a list of all users in the system with their roles.",
+        description = "Retrieves a list of all users in the system with their roles. " + ApiDocumentation.AUTH_STEPS,
         security = @SecurityRequirement(name = "bearerAuth")
     )
     @ApiResponses(value = {
@@ -73,7 +74,7 @@ public class UsersController {
     @GetMapping(value = "/{userId}")
     @Operation(
         summary = "Get user by ID",
-        description = "Retrieves a specific user's information by unique identifier.",
+        description = "Retrieves a specific user's information by unique identifier. " + ApiDocumentation.AUTH_STEPS,
         security = @SecurityRequirement(name = "bearerAuth")
     )
     @ApiResponses(value = {

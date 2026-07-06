@@ -62,12 +62,14 @@ public final class MonitoringResourceFromEntityAssembler {
         );
     }
 
-    public static CreateFleetAlertCommand toCreateAlertCommandFromResource(CreateAlertResource resource) {
+    public static CreateFleetAlertCommand toCreateAlertCommandFromResource(
+            Long machineryId,
+            CreateAlertResource resource) {
         Instant timestamp = resource.timestamp() != null && !resource.timestamp().isBlank()
                 ? Instant.parse(resource.timestamp())
                 : Instant.now();
         return new CreateFleetAlertCommand(
-                resource.machineryId(),
+                machineryId,
                 AlertType.fromApiValue(resource.type()),
                 AlertSeverity.fromApiValue(resource.severity()),
                 resource.description(),

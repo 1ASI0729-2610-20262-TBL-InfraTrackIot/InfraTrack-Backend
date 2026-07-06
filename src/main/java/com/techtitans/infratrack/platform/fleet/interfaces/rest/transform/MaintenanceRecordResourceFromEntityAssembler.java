@@ -26,9 +26,11 @@ public final class MaintenanceRecordResourceFromEntityAssembler {
         );
     }
 
-    public static CreateMaintenanceRecordCommand toCreateCommandFromResource(CreateMaintenanceRecordResource resource) {
+    public static CreateMaintenanceRecordCommand toCreateCommandFromResource(
+            Long machineryId,
+            CreateMaintenanceRecordResource resource) {
         return new CreateMaintenanceRecordCommand(
-                resource.machineryId(),
+                machineryId,
                 MaintenanceServiceType.fromApiValue(resource.serviceType()),
                 resource.description(),
                 resource.costPen(),

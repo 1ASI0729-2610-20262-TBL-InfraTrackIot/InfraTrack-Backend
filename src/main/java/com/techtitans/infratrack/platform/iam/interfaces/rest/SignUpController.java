@@ -6,6 +6,7 @@ import com.techtitans.infratrack.platform.iam.interfaces.rest.resources.UserReso
 import com.techtitans.infratrack.platform.iam.interfaces.rest.transform.SignUpCommandFromResourceAssembler;
 import com.techtitans.infratrack.platform.iam.interfaces.rest.transform.UserResourceFromEntityAssembler;
 import com.techtitans.infratrack.platform.shared.interfaces.rest.transform.ResponseEntityAssembler;
+import com.techtitans.infratrack.platform.shared.interfaces.rest.documentation.ApiDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -32,7 +33,12 @@ public class SignUpController {
     }
 
     @PostMapping("/sign-up")
-    @Operation(summary = "User registration", description = "Creates a new user account with provided credentials and assigns specified roles.")
+    @Operation(
+            summary = "User registration",
+            description = "Creates a new account. Does not return a JWT — sign in afterwards. "
+                    + ApiDocumentation.PUBLIC_ENDPOINT
+                    + " Example body: `{\"username\":\"owner@infratrack.com\",\"password\":\"Password123\","
+                    + "\"roles\":[\"ROLE_OWNER\"]}`.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "User created successfully",
                     content = @Content(schema = @Schema(implementation = UserResource.class))),

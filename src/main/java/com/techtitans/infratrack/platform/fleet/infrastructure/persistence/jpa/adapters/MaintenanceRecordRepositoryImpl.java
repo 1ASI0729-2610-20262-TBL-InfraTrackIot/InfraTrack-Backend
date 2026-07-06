@@ -29,6 +29,13 @@ public class MaintenanceRecordRepositoryImpl implements MaintenanceRecordReposit
     }
 
     @Override
+    public List<MaintenanceRecord> findByMachineryId(Long machineryId) {
+        return maintenanceRecordPersistenceRepository.findByMachineryId(machineryId).stream()
+                .map(MaintenanceRecordPersistenceAssembler::toDomainFromPersistence)
+                .toList();
+    }
+
+    @Override
     public boolean existsById(Long id) {
         return maintenanceRecordPersistenceRepository.existsById(id);
     }
